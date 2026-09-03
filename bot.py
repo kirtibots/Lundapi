@@ -35,10 +35,6 @@ def sf(text: str) -> str:
     return text.translate(_FONT_MAP)
 
 
-def title(text: str) -> str:
-    return sf(text.upper())
-
-
 # ============================================================
 # DATABASE
 # ============================================================
@@ -55,7 +51,7 @@ users = db.users
 # ============================================================
 
 app = Client(
-    "meow_api_bot",
+    "kirti_api_bot",
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
     bot_token=Config.BOT_TOKEN,
@@ -71,6 +67,7 @@ def now():
 
 
 def make_api_key(length=32):
+
     alphabet = string.ascii_letters + string.digits
 
     return "kirti_" + "".join(
@@ -80,6 +77,7 @@ def make_api_key(length=32):
 
 
 async def get_user(user_id: int):
+
     return await users.find_one(
         {"user_id": user_id}
     )
@@ -133,7 +131,7 @@ async def regenerate_key(user_id: int):
 
 
 # ============================================================
-# KEYBOARDS
+# MAIN KEYBOARD
 # ============================================================
 
 def main_keyboard():
@@ -141,17 +139,17 @@ def main_keyboard():
     return InlineKeyboardMarkup([
         [
             InlineKeyboardButton(
-                "🔑 ᴀᴘɪ ᴋᴇʏ",
+                "🔑 ɢᴇᴛ ᴀᴘɪ ᴋᴇʏ",
                 callback_data="get_key"
             ),
             InlineKeyboardButton(
-                "♻️ ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
+                "🔄 ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
                 callback_data="regenerate"
             ),
         ],
         [
             InlineKeyboardButton(
-                "📖 ᴅᴏᴄᴜᴍᴇɴᴛᴀᴛɪᴏɴ",
+                "📖 ᴀᴘɪ ᴅᴏᴄs",
                 callback_data="docs"
             ),
             InlineKeyboardButton(
@@ -177,11 +175,11 @@ def key_keyboard():
     return InlineKeyboardMarkup([
         [
             InlineKeyboardButton(
-                "♻️ ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
+                "🔄 ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
                 callback_data="regenerate"
             ),
             InlineKeyboardButton(
-                "‹ ʙᴀᴄᴋ",
+                "⬅️ ʙᴀᴄᴋ",
                 callback_data="home"
             ),
         ],
@@ -197,7 +195,7 @@ def status_keyboard():
                 callback_data="status"
             ),
             InlineKeyboardButton(
-                "‹ ʙᴀᴄᴋ",
+                "⬅️ ʙᴀᴄᴋ",
                 callback_data="home"
             ),
         ],
@@ -219,7 +217,7 @@ def docs_keyboard():
         ],
         [
             InlineKeyboardButton(
-                "‹ ʙᴀᴄᴋ",
+                "⬅️ ʙᴀᴄᴋ",
                 callback_data="home"
             ),
         ],
@@ -227,7 +225,7 @@ def docs_keyboard():
 
 
 # ============================================================
-# HOME MESSAGE
+# START TEXT
 # ============================================================
 
 def format_home(user):
@@ -253,7 +251,7 @@ Streaming API • Global CDN</i>
 <blockquote>
 <b>⚡ ǫᴜɪᴄᴋ sᴛᴀʀᴛ</b>
 
-<i>Tap 「🔑 ᴀᴘɪ ᴋᴇʏ」 below to create
+<i>Tap 「🔑 ɢᴇᴛ ᴀᴘɪ ᴋᴇʏ」 below to create
 or view your personal streaming key.</i>
 </blockquote>
 
@@ -262,7 +260,7 @@ or view your personal streaming key.</i>
 
 
 # ============================================================
-# API KEY MESSAGE
+# API KEY
 # ============================================================
 
 def format_key(user):
@@ -333,17 +331,10 @@ def format_status():
 <blockquote>
 <b>🟢 sʏsᴛᴇᴍ ʜᴇᴀʟᴛʜ</b>
 
-• <b>ᴄᴅɴ sᴛᴀᴛᴜs:</b>
-  🟢 100% Operational
-
-• <b>sᴛʀᴇᴀᴍ ǫᴜᴀʟɪᴛʏ:</b>
-  320Kbps Lossless Audio
-
-• <b>ᴀᴘɪ ʟᴀᴛᴇɴᴄʏ:</b>
-  ~180ms Ultra-Fast
-
-• <b>ᴘʀᴏᴛᴏᴄᴏʟ:</b>
-  HTTP/2 + TLS 1.3
+• <b>ᴄᴅɴ sᴛᴀᴛᴜs:</b> 🟢 100% Operational
+• <b>sᴛʀᴇᴀᴍ ǫᴜᴀʟɪᴛʏ:</b> 320Kbps Lossless Audio
+• <b>ᴀᴘɪ ʟᴀᴛᴇɴᴄʏ:</b> ~180ms Ultra-Fast
+• <b>ᴘʀᴏᴛᴏᴄᴏʟ:</b> HTTP/2 + TLS 1.3
 </blockquote>
 
 <blockquote>
@@ -355,7 +346,7 @@ def format_status():
 
 
 # ============================================================
-# DOCUMENTATION
+# DOCS
 # ============================================================
 
 def format_docs():
@@ -394,7 +385,7 @@ def format_docs():
 
 
 # ============================================================
-# PYTHON EXAMPLE
+# PYTHON
 # ============================================================
 
 def format_python():
@@ -429,7 +420,7 @@ with open("song.mp3", "wb") as f:
 
 
 # ============================================================
-# CURL EXAMPLE
+# CURL
 # ============================================================
 
 def format_curl():
@@ -461,15 +452,27 @@ async def start_handler(
         message.from_user.first_name or "User",
     )
 
+    # --------------------------------------------------------
+    # MESSAGE 1 — WELCOME TEXT
+    # --------------------------------------------------------
+
     await message.reply_text(
         format_home(user),
-        reply_markup=main_keyboard(),
         disable_web_page_preview=True,
+    )
+
+    # --------------------------------------------------------
+    # MESSAGE 2 — IMAGE + BUTTONS
+    # --------------------------------------------------------
+
+    await message.reply_photo(
+        photo=Config.START_IMAGE,
+        reply_markup=main_keyboard(),
     )
 
 
 # ============================================================
-# CALLBACK HANDLER
+# CALLBACKS
 # ============================================================
 
 @app.on_callback_query()
@@ -495,88 +498,123 @@ async def callback_handler(
 
         if data == "home":
 
-            await query.message.edit_text(
+            await query.answer()
+
+            # Send fresh home layout
+            await query.message.delete()
+
+            await client.send_message(
+                query.from_user.id,
                 format_home(user),
-                reply_markup=main_keyboard(),
                 disable_web_page_preview=True,
             )
+
+            await client.send_photo(
+                query.from_user.id,
+                Config.START_IMAGE,
+                reply_markup=main_keyboard(),
+            )
+
+            return
 
         elif data == "get_key":
 
-            await query.message.edit_text(
-                format_key(user),
+            await query.answer()
+
+            await query.message.edit_caption(
+                caption=format_key(user),
                 reply_markup=key_keyboard(),
-                disable_web_page_preview=True,
             )
+
+            return
 
         elif data == "regenerate":
 
             user = await regenerate_key(user_id)
 
-            await query.message.edit_text(
-                "⚡ <b>ᴀᴘɪ ᴋᴇʏ ʀᴇɢᴇɴᴇʀᴀᴛᴇᴅ!</b>\n\n"
-                + format_key(user),
-                reply_markup=key_keyboard(),
-                disable_web_page_preview=True,
+            await query.answer(
+                "API key regenerated successfully!"
             )
+
+            await query.message.edit_caption(
+                caption=(
+                    "⚡ <b>ᴀᴘɪ ᴋᴇʏ ʀᴇɢᴇɴᴇʀᴀᴛᴇᴅ!</b>\n\n"
+                    + format_key(user)
+                ),
+                reply_markup=key_keyboard(),
+            )
+
+            return
 
         elif data == "status":
 
-            await query.message.edit_text(
-                format_status(),
+            await query.answer()
+
+            await query.message.edit_caption(
+                caption=format_status(),
                 reply_markup=status_keyboard(),
-                disable_web_page_preview=True,
             )
+
+            return
 
         elif data == "docs":
 
-            await query.message.edit_text(
-                format_docs(),
+            await query.answer()
+
+            await query.message.edit_caption(
+                caption=format_docs(),
                 reply_markup=docs_keyboard(),
-                disable_web_page_preview=True,
             )
+
+            return
 
         elif data == "python_example":
 
-            await query.message.edit_text(
-                format_python(),
+            await query.answer()
+
+            await query.message.edit_caption(
+                caption=format_python(),
                 reply_markup=InlineKeyboardMarkup([
                     [
                         InlineKeyboardButton(
-                            "‹ ᴅᴏᴄs",
+                            "⬅️ ᴅᴏᴄs",
                             callback_data="docs"
                         )
                     ],
                     [
                         InlineKeyboardButton(
-                            "⌂ ʜᴏᴍᴇ",
+                            "🏠 ʜᴏᴍᴇ",
                             callback_data="home"
                         )
                     ],
                 ]),
-                disable_web_page_preview=True,
             )
+
+            return
 
         elif data == "curl_example":
 
-            await query.message.edit_text(
-                format_curl(),
+            await query.answer()
+
+            await query.message.edit_caption(
+                caption=format_curl(),
                 reply_markup=InlineKeyboardMarkup([
                     [
                         InlineKeyboardButton(
-                            "‹ ᴅᴏᴄs",
+                            "⬅️ ᴅᴏᴄs",
                             callback_data="docs"
                         )
                     ],
                     [
                         InlineKeyboardButton(
-                            "⌂ ʜᴏᴍᴇ",
+                            "🏠 ʜᴏᴍᴇ",
                             callback_data="home"
                         )
                     ],
                 ]),
-                disable_web_page_preview=True,
             )
+
+            return
 
         await query.answer()
 
@@ -587,10 +625,12 @@ async def callback_handler(
         )
 
         try:
+
             await query.answer(
                 "Something went wrong. Please try again.",
                 show_alert=True,
             )
+
         except Exception:
             pass
 
