@@ -160,12 +160,12 @@ def docs_keyboard():
 
 def format_home(user):
     name = user.get("first_name") or "User"
-    return f"""<blockquote><b>✦ 𝗕𝗔𝗗𝗡𝗔𝗠 𝗔𝗣𝗜 ✦ 🇨🇦</b>
+    return f"""<blockquote><b>✦ 𝗞𝗜𝗥𝗧𝗜 𝗔𝗣𝗜 ✦ 🇨🇦</b>
 <code>/start</code></blockquote>
 
 <b>╭━━━ 𝗪𝗘𝗟𝗖𝗢𝗠𝗘, {sf(name.upper())} ━━━╮</b>
 
-<blockquote><b>🎵 𝗬𝗨𝗞𝗜 𝗠𝗨𝗦𝗜𝗖 𝗘𝗡𝗚𝗜𝗡𝗘</b>
+<blockquote><b>🎵 𝗞𝗜𝗥𝗧𝗜 𝗠𝗨𝗦𝗜𝗖 𝗘𝗡𝗚𝗜𝗡𝗘</b>
 <i>Ultra High-Speed • Lossless Audio
 Streaming API • Global CDN</i></blockquote>
 
@@ -394,5 +394,5 @@ Data: {target.get('data_streamed', 0)} B"""
 # ============================================================
 
 if __name__ == "__main__":
-    print("🚀 Meow API Bot starting...")
+    print("🚀 kirti API Bot starting...")
     app.run()
