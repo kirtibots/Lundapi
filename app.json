@@ -1,0 +1,20 @@
+{
+  "name": "Kirti API Telegram Bot",
+  "description": "KIRTI API Telegram bot with API key management and MongoDB.",
+  "keywords": ["telegram", "pyrogram", "api", "mongodb"],
+  "env": {
+    "API_ID": {"description": "Telegram API ID", "required": true},
+    "API_HASH": {"description": "Telegram API Hash", "required": true},
+    "BOT_TOKEN": {"description": "Telegram bot token", "required": true},
+    "MONGO_URL": {"description": "MongoDB connection string", "required": true},
+    "DB_NAME": {"description": "MongoDB database name", "value": "kirti_api", "required": true},
+    "OWNER_ID": {"description": "Telegram numeric owner ID", "required": true},
+    "UPDATES_URL": {"description": "Updates channel URL", "value": "https://t.me/your_updates", "required": true},
+    "SUPPORT_URL": {"description": "Support URL", "value": "https://t.me/your_support", "required": true},
+    "API_NAME": {"description": "API name", "value": "KIRTI API", "required": true},
+    "API_DOMAIN": {"description": "Your actual API backend URL", "value": "https://your-api-domain.example", "required": true},
+    "DAILY_LIMIT": {"description": "Daily request limit", "value": "6000", "required": true},
+    "TIER": {"description": "Default tier", "value": "FREE", "required": true}
+  },
+  "formation": {"worker": {"quantity": 1, "size": "eco"}}
+}
