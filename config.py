@@ -90,7 +90,7 @@ class Config:
 
     START_IMAGE = get_env(
         "START_IMAGE",
-        "https://n.uguu.se/RtoiNEur.jpg"
+        "https://n.uguu.se/gZCOTGsu.jpg"
     )
 
 
