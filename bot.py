@@ -1,14 +1,17 @@
 import secrets
 import string
 from datetime import datetime, timezone
+from html import escape
 
 from pyrogram import Client, filters
+from pyrogram.enums import ParseMode
 from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton,
     CallbackQuery,
     Message,
 )
+
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from config import Config
@@ -18,7 +21,10 @@ from config import Config
 # PREMIUM FONT
 # ============================================================
 
-_FONT_NORMAL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_FONT_NORMAL = (
+    "abcdefghijklmnopqrstuvwxyz"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+)
 
 _FONT_PREMIUM = (
     "ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ"
@@ -39,7 +45,9 @@ def sf(text: str) -> str:
 # DATABASE
 # ============================================================
 
-mongo = AsyncIOMotorClient(Config.MONGO_URL)
+mongo = AsyncIOMotorClient(
+    Config.MONGO_URL
+)
 
 db = mongo[Config.DB_NAME]
 
@@ -68,7 +76,10 @@ def now():
 
 def make_api_key(length=32):
 
-    alphabet = string.ascii_letters + string.digits
+    alphabet = (
+        string.ascii_letters +
+        string.digits
+    )
 
     return "kirti_" + "".join(
         secrets.choice(alphabet)
@@ -79,7 +90,9 @@ def make_api_key(length=32):
 async def get_user(user_id: int):
 
     return await users.find_one(
-        {"user_id": user_id}
+        {
+            "user_id": user_id
+        }
     )
 
 
@@ -104,20 +117,28 @@ async def create_user(
     }
 
     await users.update_one(
-        {"user_id": user_id},
-        {"$setOnInsert": doc},
+        {
+            "user_id": user_id
+        },
+        {
+            "$setOnInsert": doc
+        },
         upsert=True,
     )
 
     return await get_user(user_id)
 
 
-async def regenerate_key(user_id: int):
+async def regenerate_key(
+    user_id: int
+):
 
     key = make_api_key()
 
     await users.update_one(
-        {"user_id": user_id},
+        {
+            "user_id": user_id
+        },
         {
             "$set": {
                 "api_key": key,
@@ -136,96 +157,104 @@ async def regenerate_key(user_id: int):
 
 def main_keyboard():
 
-    return InlineKeyboardMarkup([
+    return InlineKeyboardMarkup(
         [
-            InlineKeyboardButton(
-                "🔑 ɢᴇᴛ ᴀᴘɪ ᴋᴇʏ",
-                callback_data="get_key"
-            ),
-            InlineKeyboardButton(
-                "🔄 ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
-                callback_data="regenerate"
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                "📖 ᴀᴘɪ ᴅᴏᴄs",
-                callback_data="docs"
-            ),
-            InlineKeyboardButton(
-                "⚡ sᴛᴀᴛᴜs",
-                callback_data="status"
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                "📢 ᴜᴘᴅᴀᴛᴇs",
-                url=Config.UPDATES_URL
-            ),
-            InlineKeyboardButton(
-                "💬 sᴜᴘᴘᴏʀᴛ",
-                url=Config.SUPPORT_URL
-            ),
-        ],
-    ])
+            [
+                InlineKeyboardButton(
+                    "🔑 ɢᴇᴛ ᴀᴘɪ ᴋᴇʏ",
+                    callback_data="get_key",
+                ),
+                InlineKeyboardButton(
+                    "🔄 ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
+                    callback_data="regenerate",
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "📖 ᴀᴘɪ ᴅᴏᴄs",
+                    callback_data="docs",
+                ),
+                InlineKeyboardButton(
+                    "⚡ sᴛᴀᴛᴜs",
+                    callback_data="status",
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "📢 ᴜᴘᴅᴀᴛᴇs",
+                    url=Config.UPDATES_URL,
+                ),
+                InlineKeyboardButton(
+                    "💬 sᴜᴘᴘᴏʀᴛ",
+                    url=Config.SUPPORT_URL,
+                ),
+            ],
+        ]
+    )
 
 
 def key_keyboard():
 
-    return InlineKeyboardMarkup([
+    return InlineKeyboardMarkup(
         [
-            InlineKeyboardButton(
-                "🔄 ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
-                callback_data="regenerate"
-            ),
-            InlineKeyboardButton(
-                "⬅️ ʙᴀᴄᴋ",
-                callback_data="home"
-            ),
-        ],
-    ])
+            [
+                InlineKeyboardButton(
+                    "🔄 ʀᴇɢᴇɴᴇʀᴀᴛᴇ",
+                    callback_data="regenerate",
+                ),
+                InlineKeyboardButton(
+                    "⬅️ ʙᴀᴄᴋ",
+                    callback_data="home",
+                ),
+            ]
+        ]
+    )
 
 
 def status_keyboard():
 
-    return InlineKeyboardMarkup([
+    return InlineKeyboardMarkup(
         [
-            InlineKeyboardButton(
-                "🔄 ʀᴇғʀᴇsʜ",
-                callback_data="status"
-            ),
-            InlineKeyboardButton(
-                "⬅️ ʙᴀᴄᴋ",
-                callback_data="home"
-            ),
-        ],
-    ])
+            [
+                InlineKeyboardButton(
+                    "🔄 ʀᴇғʀᴇsʜ",
+                    callback_data="status",
+                ),
+                InlineKeyboardButton(
+                    "⬅️ ʙᴀᴄᴋ",
+                    callback_data="home",
+                ),
+            ]
+        ]
+    )
 
 
 def docs_keyboard():
 
-    return InlineKeyboardMarkup([
+    return InlineKeyboardMarkup(
         [
-            InlineKeyboardButton(
-                "🐍 ᴘʏᴛʜᴏɴ",
-                callback_data="python_example"
-            ),
-            InlineKeyboardButton(
-                "🚀 ᴄᴜʀʟ",
-                callback_data="curl_example"
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                "⬅️ ʙᴀᴄᴋ",
-                callback_data="home"
-            ),
-        ],
-    ])
+            [
+                InlineKeyboardButton(
+                    "🐍 ᴘʏᴛʜᴏɴ",
+                    callback_data="python_example",
+                ),
+                InlineKeyboardButton(
+                    "🚀 ᴄᴜʀʟ",
+                    callback_data="curl_example",
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "⬅️ ʙᴀᴄᴋ",
+                    callback_data="home",
+                ),
+            ],
+        ]
+    )
 
 
 # ============================================================
-# START TEXT
+# START / HOME CAPTION
 # ============================================================
 
 def format_home(user):
@@ -233,6 +262,10 @@ def format_home(user):
     name = user.get(
         "first_name"
     ) or "User"
+
+    name = escape(
+        str(name)
+    )
 
     return f"""
 <blockquote>
@@ -265,7 +298,10 @@ or view your personal streaming key.</i>
 
 def format_key(user):
 
-    key = user["api_key"]
+    key = user.get(
+        "api_key",
+        "N/A"
+    )
 
     endpoint = (
         f"{Config.API_DOMAIN}"
@@ -281,17 +317,17 @@ def format_key(user):
 <blockquote>
 <b>🔑 ᴀᴄᴛɪᴠᴇ ᴀᴘɪ ᴋᴇʏ</b>
 
-<code>{key}</code>
+<code>{escape(str(key))}</code>
 
 <i>Keep this key private.
 Do not share it publicly.</i>
 
-• <b>ᴛɪᴇʀ:</b> {user.get("tier", Config.TIER)}
-• <b>sᴛᴀᴛᴜs:</b> 🟢 {user.get("status", "ACTIVE")}
+• <b>ᴛɪᴇʀ:</b> {escape(str(user.get("tier", Config.TIER)))}
+• <b>sᴛᴀᴛᴜs:</b> 🟢 {escape(str(user.get("status", "ACTIVE")))}
 </blockquote>
 
 <blockquote>
-<b>📊 ǫᴜᴏᴛᴀ & ᴜsᴀɢᴇ</b>
+<b>📊 ǫᴜᴏᴛᴀ &amp; ᴜsᴀɢᴇ</b>
 
 • <b>ʀᴇǫᴜᴇsᴛs ᴛᴏᴅᴀʏ:</b>
   {user.get("requests_today", 0)}
@@ -312,7 +348,7 @@ Do not share it publicly.</i>
 <blockquote>
 <b>🔗 sᴛʀᴇᴀᴍ ᴇɴᴅᴘᴏɪɴᴛ</b>
 
-<code>{endpoint}</code>
+<code>{escape(endpoint)}</code>
 </blockquote>
 """
 
@@ -359,11 +395,11 @@ def format_docs():
 <blockquote>
 <b>🎧 ᴀᴜᴅɪᴏ sᴛʀᴇᴀᴍ</b>
 
-<code>{Config.API_DOMAIN}/stream/{{VIDEO_ID}}?key={{YOUR_KEY}}&amp;type=audio</code>
+<code>{escape(Config.API_DOMAIN)}/stream/{{VIDEO_ID}}?key={{YOUR_KEY}}&amp;type=audio</code>
 
 <b>ℹ️ ᴛʀᴀᴄᴋ ᴍᴇᴛᴀᴅᴀᴛᴀ</b>
 
-<code>{Config.API_DOMAIN}/info/{{VIDEO_ID}}?key={{YOUR_KEY}}</code>
+<code>{escape(Config.API_DOMAIN)}/info/{{VIDEO_ID}}?key={{YOUR_KEY}}</code>
 </blockquote>
 
 <blockquote>
@@ -385,7 +421,7 @@ def format_docs():
 
 
 # ============================================================
-# PYTHON EXAMPLE
+# PYTHON
 # ============================================================
 
 def format_python():
@@ -400,7 +436,7 @@ def format_python():
 API_KEY = "YOUR_API_KEY"
 VIDEO_ID = "VIDEO_ID"
 
-url = "{Config.API_DOMAIN}/stream/" + VIDEO_ID
+url = "{escape(Config.API_DOMAIN)}/stream/" + VIDEO_ID
 
 params = {{
     "key": API_KEY,
@@ -420,7 +456,7 @@ with open("song.mp3", "wb") as f:
 
 
 # ============================================================
-# CURL EXAMPLE
+# CURL
 # ============================================================
 
 def format_curl():
@@ -430,12 +466,14 @@ def format_curl():
 <b>🚀 ᴄᴜʀʟ / ʙᴀsʜ ᴇxᴀᴍᴘʟᴇ</b>
 </blockquote>
 
-<pre><code>curl -L "{Config.API_DOMAIN}/stream/VIDEO_ID?key=YOUR_API_KEY&amp;type=audio" -o song.mp3</code></pre>
+<pre><code>curl -L "{escape(Config.API_DOMAIN)}/stream/VIDEO_ID?key=YOUR_API_KEY&amp;type=audio" -o song.mp3</code></pre>
 """
 
 
 # ============================================================
 # START
+# ONE SINGLE MESSAGE:
+# PHOTO + CAPTION + BUTTONS
 # ============================================================
 
 @app.on_message(
@@ -452,27 +490,49 @@ async def start_handler(
         message.from_user.first_name or "User",
     )
 
-    # ========================================================
-    # PHOTO FIRST
-    # ========================================================
-
     await message.reply_photo(
         photo=Config.START_IMAGE,
+        caption=format_home(user),
+        parse_mode=ParseMode.HTML,
         reply_markup=main_keyboard(),
-    )
-
-    # ========================================================
-    # PREMIUM START TEXT AFTER PHOTO
-    # ========================================================
-
-    await message.reply_text(
-        format_home(user),
-        disable_web_page_preview=True,
     )
 
 
 # ============================================================
-# CALLBACKS
+# HELP
+# SAME AS START
+# ============================================================
+
+@app.on_message(
+    filters.command("help") &
+    filters.private
+)
+async def help_handler(
+    client: Client,
+    message: Message
+):
+
+    user = await get_user(
+        message.from_user.id
+    )
+
+    if not user:
+
+        user = await create_user(
+            message.from_user.id,
+            message.from_user.first_name or "User",
+        )
+
+    await message.reply_photo(
+        photo=Config.START_IMAGE,
+        caption=format_home(user),
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_keyboard(),
+    )
+
+
+# ============================================================
+# CALLBACK HANDLER
 # ============================================================
 
 @app.on_callback_query()
@@ -483,7 +543,9 @@ async def callback_handler(
 
     user_id = query.from_user.id
 
-    user = await get_user(user_id)
+    user = await get_user(
+        user_id
+    )
 
     if not user:
 
@@ -504,24 +566,10 @@ async def callback_handler(
 
             await query.answer()
 
-            # Delete current message
-            try:
-                await query.message.delete()
-            except Exception:
-                pass
-
-            # Send PHOTO first
-            await client.send_photo(
-                query.from_user.id,
-                Config.START_IMAGE,
+            await query.message.edit_caption(
+                caption=format_home(user),
+                parse_mode=ParseMode.HTML,
                 reply_markup=main_keyboard(),
-            )
-
-            # Send PREMIUM TEXT after photo
-            await client.send_message(
-                query.from_user.id,
-                format_home(user),
-                disable_web_page_preview=True,
             )
 
             return
@@ -536,6 +584,7 @@ async def callback_handler(
 
             await query.message.edit_caption(
                 caption=format_key(user),
+                parse_mode=ParseMode.HTML,
                 reply_markup=key_keyboard(),
             )
 
@@ -547,7 +596,9 @@ async def callback_handler(
 
         elif data == "regenerate":
 
-            user = await regenerate_key(user_id)
+            user = await regenerate_key(
+                user_id
+            )
 
             await query.answer(
                 "API key regenerated successfully!"
@@ -555,6 +606,7 @@ async def callback_handler(
 
             await query.message.edit_caption(
                 caption=format_key(user),
+                parse_mode=ParseMode.HTML,
                 reply_markup=key_keyboard(),
             )
 
@@ -570,6 +622,7 @@ async def callback_handler(
 
             await query.message.edit_caption(
                 caption=format_status(),
+                parse_mode=ParseMode.HTML,
                 reply_markup=status_keyboard(),
             )
 
@@ -585,6 +638,7 @@ async def callback_handler(
 
             await query.message.edit_caption(
                 caption=format_docs(),
+                parse_mode=ParseMode.HTML,
                 reply_markup=docs_keyboard(),
             )
 
@@ -600,20 +654,23 @@ async def callback_handler(
 
             await query.message.edit_caption(
                 caption=format_python(),
-                reply_markup=InlineKeyboardMarkup([
+                parse_mode=ParseMode.HTML,
+                reply_markup=InlineKeyboardMarkup(
                     [
-                        InlineKeyboardButton(
-                            "⬅️ ᴅᴏᴄs",
-                            callback_data="docs"
-                        )
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            "🏠 ʜᴏᴍᴇ",
-                            callback_data="home"
-                        )
-                    ],
-                ]),
+                        [
+                            InlineKeyboardButton(
+                                "⬅️ ᴅᴏᴄs",
+                                callback_data="docs",
+                            )
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                "🏠 ʜᴏᴍᴇ",
+                                callback_data="home",
+                            )
+                        ],
+                    ]
+                ),
             )
 
             return
@@ -628,26 +685,29 @@ async def callback_handler(
 
             await query.message.edit_caption(
                 caption=format_curl(),
-                reply_markup=InlineKeyboardMarkup([
+                parse_mode=ParseMode.HTML,
+                reply_markup=InlineKeyboardMarkup(
                     [
-                        InlineKeyboardButton(
-                            "⬅️ ᴅᴏᴄs",
-                            callback_data="docs"
-                        )
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            "🏠 ʜᴏᴍᴇ",
-                            callback_data="home"
-                        )
-                    ],
-                ]),
+                        [
+                            InlineKeyboardButton(
+                                "⬅️ ᴅᴏᴄs",
+                                callback_data="docs",
+                            )
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                "🏠 ʜᴏᴍᴇ",
+                                callback_data="home",
+                            )
+                        ],
+                    ]
+                ),
             )
 
             return
 
         # ====================================================
-        # UNKNOWN CALLBACK
+        # UNKNOWN
         # ====================================================
 
         await query.answer()
@@ -682,7 +742,6 @@ async def user_info(
     message: Message
 ):
 
-    # Owner check
     if (
         Config.OWNER_ID
         and message.from_user.id != Config.OWNER_ID
@@ -699,7 +758,8 @@ async def user_info(
     ):
 
         await message.reply_text(
-            "Usage: <code>/user 123456789</code>"
+            "Usage: <code>/user 123456789</code>",
+            parse_mode=ParseMode.HTML,
         )
 
         return
@@ -716,6 +776,13 @@ async def user_info(
 
         return
 
+    target_name = escape(
+        str(target.get(
+            "first_name",
+            "User"
+        ))
+    )
+
     await message.reply_text(
         f"""
 <b>👤 ᴜsᴇʀ ɪɴғᴏ</b>
@@ -724,16 +791,16 @@ async def user_info(
 <code>{target['user_id']}</code>
 
 <b>ɴᴀᴍᴇ:</b>
-{target.get('first_name', 'User')}
+{target_name}
 
 <b>ᴀᴘɪ ᴋᴇʏ:</b>
-<code>{target['api_key']}</code>
+<code>{escape(str(target['api_key']))}</code>
 
 <b>ᴛɪᴇʀ:</b>
-{target.get('tier', Config.TIER)}
+{escape(str(target.get('tier', Config.TIER)))}
 
 <b>sᴛᴀᴛᴜs:</b>
-{target.get('status', 'ACTIVE')}
+{escape(str(target.get('status', 'ACTIVE')))}
 
 <b>ᴛᴏᴅᴀʏ:</b>
 {target.get('requests_today', 0)}
@@ -743,7 +810,8 @@ async def user_info(
 
 <b>ᴅᴀᴛᴀ:</b>
 {target.get('data_streamed', 0)} B
-"""
+""",
+        parse_mode=ParseMode.HTML,
     )
 
 
@@ -753,6 +821,8 @@ async def user_info(
 
 if __name__ == "__main__":
 
-    print("🚀 Kirti API Bot starting...")
+    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print("🚀 KIRTI API BOT STARTING...")
+    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
     app.run()
