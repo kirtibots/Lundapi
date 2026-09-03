@@ -1,56 +1,63 @@
-# KIRTI API Telegram Bot
+<p align="center">
+<b>𝗗𝗘𝗣𝗟𝗢𝗬𝗠𝗘𝗡𝗧 𝗠𝗘𝗧𝗛𝗢𝗗𝗦</b>
+</p>
 
-A Pyrogram + MongoDB Telegram API-key management bot.
+<h3 align="center">
+    ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʜᴇʀᴏᴋᴜ 」─
+</h3>
 
-## Features
+<p align="center"><a href="https://dashboard.heroku.com/new?template=https://github.com/opk00637-glitch/Kriti-"> <img src="https://www.herokucdn.com/deploy/button.svg"></a></p>
 
-- `/start` welcome UI
-- Per-user API key generation
-- Regenerate API key
-- Quota and usage screen
-- API status screen
-- API documentation
-- Python and CURL examples
-- MongoDB persistence
-- Premium styled Telegram UI
-- Heroku worker configuration
+<br />
 
-## Heroku deployment
+---
 
-Create a Heroku app and add these Config Vars:
+### 🔧 Quick Setup
 
-```text
-API_ID=your_telegram_api_id
-API_HASH=your_telegram_api_hash
-BOT_TOKEN=your_bot_token
-MONGO_URL=your_mongodb_connection_string
-DB_NAME=kirti_api
-OWNER_ID=your_telegram_numeric_id
-UPDATES_URL=https://t.me/your_updates
-SUPPORT_URL=https://t.me/your_support
-API_NAME=KIRTI API
-API_DOMAIN=https://your-api-domain.example
-DAILY_LIMIT=6000
-TIER=FREE
-```
+1. **Upgrade & Update:**
+   ```bash
+   sudo apt-get update && sudo apt-get upgrade -y
+   ```
 
-Then deploy this ZIP/repository. Heroku will use:
+2. **Install Required Packages:**
+   ```bash
+   sudo apt-get install python3-pip ffmpeg -y
+   ```
+3. **Setting up PIP**
+   ```bash
+   sudo pip3 install -U pip
+   ```
+4. **Installing Node**
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash && source ~/.bashrc && nvm install v18
+   ```
+5. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Badnam019/KRITIMUSIC && cd KRITIMUSIC
+   ```
+6. **Install Requirements**
+   ```bash
+   pip3 install -U -r requirements.txt
+   ```
+7. **Create .env  with sample.env**
+   ```bash
+   cp sample.env .env
+   ```
+   - Edit .env with your vars
+8. **Editing Vars:**
+   ```bash
+   vi .env
+   ```
+   - Edit .env with your values.
+   - Press `I` button on keyboard to start editing.
+   - Press `Ctrl + C`  once you are done with editing vars and type `:wq` to save .env or `:qa` to exit editing.
+9. **Installing tmux**
+    ```bash
+    sudo apt install tmux -y && tmux
+    ```
+10. **Run the Bot**
+    ```bash
+    bash start
+    ```
 
-```text
-worker: python bot.py
-```
-
-After deployment, scale the worker to 1 dyno.
-
-## Local
-
-```bash
-pip install -r requirements.txt
-python bot.py
-```
-
-Rename `.env.example` to `.env` for local use.
-
-## Important
-
-`API_DOMAIN` is only the URL displayed in the bot's documentation. This package does not itself implement an audio/video streaming backend. Point it to your own API server.
+---
