@@ -33,7 +33,7 @@ class Config:
 
     START_IMAGE = os.getenv(
         "START_IMAGE",
-        ""
+        "https://n.uguu.se/RtoiNEur.jpg"
     )
 
 
@@ -63,7 +63,7 @@ class Config:
 
     API_DOMAIN = os.getenv(
         "API_DOMAIN",
-        "http://music.yukiapi.site"
+        "http://yt-music-api-seven.vercel.app"
     )
 
     DAILY_LIMIT = int(
