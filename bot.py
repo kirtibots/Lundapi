@@ -385,7 +385,7 @@ def format_docs():
 
 
 # ============================================================
-# PYTHON
+# PYTHON EXAMPLE
 # ============================================================
 
 def format_python():
@@ -420,7 +420,7 @@ with open("song.mp3", "wb") as f:
 
 
 # ============================================================
-# CURL
+# CURL EXAMPLE
 # ============================================================
 
 def format_curl():
@@ -452,22 +452,22 @@ async def start_handler(
         message.from_user.first_name or "User",
     )
 
-    # --------------------------------------------------------
-    # MESSAGE 1 — WELCOME TEXT
-    # --------------------------------------------------------
-
-    await message.reply_text(
-        format_home(user),
-        disable_web_page_preview=True,
-    )
-
-    # --------------------------------------------------------
-    # MESSAGE 2 — IMAGE + BUTTONS
-    # --------------------------------------------------------
+    # ========================================================
+    # PHOTO FIRST
+    # ========================================================
 
     await message.reply_photo(
         photo=Config.START_IMAGE,
         reply_markup=main_keyboard(),
+    )
+
+    # ========================================================
+    # PREMIUM START TEXT AFTER PHOTO
+    # ========================================================
+
+    await message.reply_text(
+        format_home(user),
+        disable_web_page_preview=True,
     )
 
 
@@ -496,26 +496,39 @@ async def callback_handler(
 
     try:
 
+        # ====================================================
+        # HOME
+        # ====================================================
+
         if data == "home":
 
             await query.answer()
 
-            # Send fresh home layout
-            await query.message.delete()
+            # Delete current message
+            try:
+                await query.message.delete()
+            except Exception:
+                pass
 
-            await client.send_message(
-                query.from_user.id,
-                format_home(user),
-                disable_web_page_preview=True,
-            )
-
+            # Send PHOTO first
             await client.send_photo(
                 query.from_user.id,
                 Config.START_IMAGE,
                 reply_markup=main_keyboard(),
             )
 
+            # Send PREMIUM TEXT after photo
+            await client.send_message(
+                query.from_user.id,
+                format_home(user),
+                disable_web_page_preview=True,
+            )
+
             return
+
+        # ====================================================
+        # GET API KEY
+        # ====================================================
 
         elif data == "get_key":
 
@@ -528,6 +541,10 @@ async def callback_handler(
 
             return
 
+        # ====================================================
+        # REGENERATE
+        # ====================================================
+
         elif data == "regenerate":
 
             user = await regenerate_key(user_id)
@@ -537,14 +554,15 @@ async def callback_handler(
             )
 
             await query.message.edit_caption(
-                caption=(
-                    "⚡ <b>ᴀᴘɪ ᴋᴇʏ ʀᴇɢᴇɴᴇʀᴀᴛᴇᴅ!</b>\n\n"
-                    + format_key(user)
-                ),
+                caption=format_key(user),
                 reply_markup=key_keyboard(),
             )
 
             return
+
+        # ====================================================
+        # STATUS
+        # ====================================================
 
         elif data == "status":
 
@@ -557,6 +575,10 @@ async def callback_handler(
 
             return
 
+        # ====================================================
+        # DOCS
+        # ====================================================
+
         elif data == "docs":
 
             await query.answer()
@@ -567,6 +589,10 @@ async def callback_handler(
             )
 
             return
+
+        # ====================================================
+        # PYTHON
+        # ====================================================
 
         elif data == "python_example":
 
@@ -592,6 +618,10 @@ async def callback_handler(
 
             return
 
+        # ====================================================
+        # CURL
+        # ====================================================
+
         elif data == "curl_example":
 
             await query.answer()
@@ -615,6 +645,10 @@ async def callback_handler(
             )
 
             return
+
+        # ====================================================
+        # UNKNOWN CALLBACK
+        # ====================================================
 
         await query.answer()
 
@@ -648,6 +682,7 @@ async def user_info(
     message: Message
 ):
 
+    # Owner check
     if (
         Config.OWNER_ID
         and message.from_user.id != Config.OWNER_ID
@@ -695,10 +730,10 @@ async def user_info(
 <code>{target['api_key']}</code>
 
 <b>ᴛɪᴇʀ:</b>
-{target.get('tier')}
+{target.get('tier', Config.TIER)}
 
 <b>sᴛᴀᴛᴜs:</b>
-{target.get('status')}
+{target.get('status', 'ACTIVE')}
 
 <b>ᴛᴏᴅᴀʏ:</b>
 {target.get('requests_today', 0)}
